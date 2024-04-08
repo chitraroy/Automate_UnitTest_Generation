@@ -11,13 +11,15 @@ document.getElementById("generateTestButton").addEventListener("click", function
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            // Update this line to display the generated unit test
+            // Display the generated unit test
             document.getElementById("testResult").textContent = data.test;
+            // Display the explanation for the generated unit test
+            document.getElementById("testExplanation").textContent = data.explanation;
         })
         .catch((error) => {
             console.error('Error:', error);
-            // Optionally handle errors by displaying them to the user as well
             document.getElementById("testResult").textContent = "Error generating unit test.";
+            document.getElementById("testExplanation").textContent = "Error generating explanation.";
         });
     } else {
         alert("Please paste a block of code.");

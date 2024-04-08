@@ -26,4 +26,7 @@ async def generate_test(request: Request):
     # placeholder for logic to generate test using LLM
     generated_test = "def test_function():\n    assert True  # Placeholder for generated test"
 
-    return JSONResponse(content={"test": generated_test})
+    # placeholder for logic to get explanation from LLM
+    explanation = "This test checks if the function always returns True, which is a basic example."
+
+    return JSONResponse(content={"test": generated_test, 'explanation': explanation})
