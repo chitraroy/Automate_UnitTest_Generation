@@ -1,4 +1,4 @@
-from chalice import Chalice, Response, HTTPException
+from chalice import Chalice, Response
 from services.audioservice import AudioService
 from services.testgenerationservice import TestGenerationService
 import os
