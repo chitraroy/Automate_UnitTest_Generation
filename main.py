@@ -6,8 +6,9 @@ import boto3
 
 app = FastAPI()
 
-# AWS Polly client setup
+# AWS client setup
 polly_client = boto3.client('polly')
+translate_client = boto3.client('translate')
 
 # mount static directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -40,17 +41,29 @@ async def generate_test(request: Request):
 async def generate_audio(request: Request):
     body = await request.json()
     text = body.get("text", "")
-    lang = body.get("lang", "en-US")  # default to US English for testing but this will come from the front end
+    target_lang = body.get("lang", "en-US")  # default to english if, somehow, no value comes back (should never happen though)
 
     if not text:
         raise HTTPException(status_code=400, detail="No text provided")
+    
+    # if the target language is not english, then translate first
+    if target_lang != "en-US":
+        try:
+            translation = translate_client.translate_text(
+                Text=text,
+                SourceLanguageCode='en',  # this assumes the soruce text will always be english - maybe we need to talk about this?
+                TargetLanguageCode=target_lang.split('-')[0]  # to format lang code to AWS acceptable format (ISO 639-1 standard)
+            )
+            text = translation['TranslatedText']
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Translation error: {str(e)}")
 
     try:
         response = polly_client.synthesize_speech(
             Text=text,
             OutputFormat='mp3',
             VoiceId='Joanna',  # hardcoded voice, as a nice to have, we can make this selectable by the user
-            LanguageCode=lang
+            LanguageCode=target_lang
         )
         
         # stream the audio back to the client

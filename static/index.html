@@ -12,28 +12,28 @@
             <h1>LLM Unit Test Generator</h1>
         </header>
         <main>
+            <!-- Input Section -->
             <section class="input-section">
                 <h2>Enter Code Block</h2>
                 <textarea id="codeInput" placeholder="Paste your code block here..."></textarea>
                 <button type="button" id="generateTestButton">Generate Unit Test</button>
             </section>
+
+            <!-- For the results -->
+            <!-- Generated Test -->
             <section class="result-section">
                 <h2>Generated Unit Test</h2>
                 <pre id="testResult">Your generated unit test will appear here...</pre>
             </section>
-            <section class="explanation-section">
-                <h2>Explanation of the Generated Unit Test</h2>
-                <pre id="testExplanation">The explanation will appear here...</pre>
-            </section>
+            <!-- Explanation, lang selection and playback -->
             <section class="explanation-section">
                 <h2>Explanation of the Generated Unit Test</h2>
                 <pre id="testExplanation">The explanation will appear here...</pre>
                 <select id="languageSelect">
                     <option value="en-US">English - US</option>
-                    <!-- Add other Polly supported languages here -->
                     <option value="es-ES">Spanish - Spain</option>
                     <option value="de-DE">German - Germany</option>
-                    <!-- ... -->
+                    <!-- other langs to support -->
                 </select>
                 <button id="playAudioButton">Play Audio</button>
             </section>
