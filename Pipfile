@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 boto3 = "*"
 chalice = "*"
+openai = "*"
+python-environ = "*"
 
 [dev-packages]
 

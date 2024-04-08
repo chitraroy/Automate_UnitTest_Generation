@@ -21,3 +21,4 @@ Pipfile.lock
 
 # Miscellaneous
 .DS_Store
+.env
