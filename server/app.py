@@ -1,19 +1,37 @@
-from chalice import Chalice, Response
+from chalice import Chalice, Response, HTTPException
+from services.audioservice import AudioService
+from services.testgenerationservice import TestGenerationService
 import os
 
 app = Chalice(app_name='server')
-
+audioservice = AudioService()
+testgenerationservice = TestGenerationService()
 
 @app.route('/')
 def index():
-    # Define the path to your HTML file
-    html_file_path =  'static/index.html'
+    return {'hello': 'world'}
+
+@app.route('/generate-test', methods=['POST'])
+def generate_test():
+    request = app.current_request
+    body = request.json_body
+    code_block = body.get('code', '')
+    if not code_block:
+        return Response(body='No code block provided', status_code=400)
+    else:
+        print(code_block)
+
+    generated_test = testgenerationservice.generate_test(code_block)
+
+    return {'test': generated_test['test'], 'explanation': generated_test['explanation']}
+
+@app.route('/generate-audio', methods=['POST'])
+def generate_audio():
+    request = app.current_request
+    body = request.json_body
+    text = body.get("text", "")
+    target_lang = body.get("lang", "en-US")
     
-    # Read the content of the HTML file
-    with open(html_file_path, 'r') as html_file:
-        html_content = html_file.read()
-    
-    # Return the HTML content with the correct content-type header
-    return Response(body=html_content,
-                        status_code=200,
-                        headers={'Content-Type': 'text/html'})
+    audio = audioservice.generate_audio(text, target_lang)
+
+    return Response(body=audio, headers={'Content-Type': 'audio/mpeg'}, status_code=200)
